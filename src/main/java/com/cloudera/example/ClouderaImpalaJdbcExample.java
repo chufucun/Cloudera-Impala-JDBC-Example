@@ -10,80 +10,82 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class ClouderaImpalaJdbcExample {
-	
-	private static final String CONNECTION_URL_PROPERTY = "connection.url";
-	private static final String JDBC_DRIVER_NAME_PROPERTY = "jdbc.driver.class.name";
 
-	private static String connectionUrl;
-	private static String jdbcDriverName;
+  private static final String CONNECTION_URL_PROPERTY = "connection.url";
+  private static final String JDBC_DRIVER_NAME_PROPERTY = "jdbc.driver.class.name";
 
-        private static void loadConfiguration() throws IOException {
-                InputStream input = null;
-                try {
-                        String filename = ClouderaImpalaJdbcExample.class.getSimpleName() + ".conf";
-                        input = ClouderaImpalaJdbcExample.class.getClassLoader().getResourceAsStream(filename);
-                        Properties prop = new Properties();
-                        prop.load(input);
-        
-                        connectionUrl = prop.getProperty(CONNECTION_URL_PROPERTY);
-                        jdbcDriverName = prop.getProperty(JDBC_DRIVER_NAME_PROPERTY);
-                } finally {
-                        try {
-                                if (input != null)
-                                        input.close();
-                        } catch (IOException e) {
-                                // nothing to do
-                        }
-                }
-        }
+  private static String connectionUrl;
+  private static String jdbcDriverName;
 
-	public static void main(String[] args) throws IOException {
+  private static void loadConfiguration() throws IOException {
+    InputStream input = null;
+    try {
+      String filename = ClouderaImpalaJdbcExample.class.getSimpleName() + ".conf";
+      input = ClouderaImpalaJdbcExample.class.getClassLoader().getResourceAsStream(filename);
+      Properties prop = new Properties();
+      prop.load(input);
 
-                if (args.length != 1) {
-                        System.out.println("Syntax: ClouderaImpalaJdbcExample \"<SQL_query>\"");
-                        System.exit(1);
-                }
-                String sqlStatement = args[0];
-                
-                loadConfiguration();
+      connectionUrl = prop.getProperty(CONNECTION_URL_PROPERTY);
+      jdbcDriverName = prop.getProperty(JDBC_DRIVER_NAME_PROPERTY);
+    } finally {
+      try {
+				if (input != null) {
+					input.close();
+				}
+      } catch (IOException e) {
+				System.out.println(e.getMessage());
+        // nothing to do
+      }
+    }
+  }
 
-		System.out.println("\n=============================================");
-		System.out.println("Cloudera Impala JDBC Example");
-		System.out.println("Using Connection URL: " + connectionUrl);
-		System.out.println("Running Query: " + sqlStatement);
+  public static void main(String[] args) throws IOException {
 
-		Connection con = null;
+    if (args.length != 1) {
+      System.out.println("Syntax: ClouderaImpalaJdbcExample \"<SQL_query>\"");
+      System.exit(1);
+    }
+    String sqlStatement = args[0];
 
-		try {
+    loadConfiguration();
 
-			Class.forName(jdbcDriverName);
+    System.out.println("\n=============================================");
+    System.out.println("Cloudera Impala JDBC Example");
+    System.out.println("Using Connection URL: " + connectionUrl);
+    System.out.println("Running Query: " + sqlStatement);
 
-			con = DriverManager.getConnection(connectionUrl);
+    Connection con = null;
 
-			Statement stmt = con.createStatement();
+    try {
 
-			ResultSet rs = stmt.executeQuery(sqlStatement);
+      Class.forName(jdbcDriverName);
 
-			System.out.println("\n== Begin Query Results ======================");
+      con = DriverManager.getConnection(connectionUrl);
 
-			// print the results to the console
-			while (rs.next()) {
-				// the example query returns one String column
-				System.out.println(rs.getString(1));
-			}
+      Statement stmt = con.createStatement();
 
-			System.out.println("== End Query Results =======================\n\n");
+      ResultSet rs = stmt.executeQuery(sqlStatement);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				con.close();
-			} catch (Exception e) {
-				// swallow
-			}
-		}
-	}
+      System.out.println("\n== Begin Query Results ======================");
+
+      // print the results to the console
+      while (rs.next()) {
+        // the example query returns one String column
+        System.out.println(rs.getString(1));
+      }
+
+      System.out.println("== End Query Results =======================\n\n");
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        con.close();
+      } catch (Exception e) {
+        // swallow
+      }
+    }
+  }
 }

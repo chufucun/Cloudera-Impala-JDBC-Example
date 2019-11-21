@@ -1,24 +1,14 @@
 ###Cloudera Impala JDBC Example
 
-[Apache Impala (Incubating)](http://www.cloudera.com/products/apache-hadoop/impala.html) is an open source, analytic MPP database for Apache Hadoop.
+[Apache Impala](http://www.cloudera.com/products/apache-hadoop/impala.html) is an open source, analytic MPP database for Apache Hadoop.
 
 This example shows how to build and run a Maven-based project to execute SQL queries on Impala using JDBC
 
-This example was tested using Impala 2.3 included with [CDH 5.5.2](http://www.cloudera.com/downloads/cdh/5-5-2.html) and the [Impala JDBC Driver v2.5.30](http://www.cloudera.com/downloads/connectors/impala/jdbc/2-5-30.html)
+This example was tested using Impala 3.2 included with [CDH 6.3.1](https://www.cloudera.com/downloads/cdh/6-3-1.html) and the [Impala JDBC Driver v2.6.15](http://www.cloudera.com/downloads/connectors/impala/jdbc/2-5-30.html)
 
-When you download the Impala JDBC Driver from the link above, it is packaged as a zip file with separate distributions for JDBC3, JDBC4 and JDBC4.1.  This example uses the distribution for JDBC4.1 on RHEL6 x86_64.  The downloaded zip file contains the following eleven jar files:
+When you download the Impala JDBC Driver from the link above, it is packaged as a zip file with separate distributions for JDBC4, JDBC4.1 and JDBC4.2. In addition, the required third-party libraries and dependencies are packaged and shared in the driver JAR file in the archive. This example uses the distribution for JDBC4.1 on RHEL7 x86_64.  The downloaded zip file contains the following eleven jar files:
 
 	(1)  ImpalaJDBC41.jar
-	(2)  TCLIServiceClient.jar
-	(3)  hive_metastore.jar
-	(4)  hive_service.jar
-	(5)  ql.jar
-	(6)  libfb303-0.9.0.jar
-	(7)  libthrift-0.9.0.jar
-	(8)  log4j-1.2.14.jar
-	(9)  slf4j-api-1.5.11.jar
-	(10) slf4j-log4j12-1.5.11.jar
-	(11) zookeeper-3.4.6.jar
 
 The JDBC driver's installation instructions say only that "...you must set the class path to include all the JAR files from the ZIP archive containing the driver that you are using..."
 
