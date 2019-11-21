@@ -1,4 +1,4 @@
-###Cloudera Impala JDBC Example
+### Cloudera Impala JDBC Example
 
 [Apache Impala](http://www.cloudera.com/products/apache-hadoop/impala.html) is an open source, analytic MPP database for Apache Hadoop.
 
