@@ -16,6 +16,7 @@
     <impala.jdbc.version>2.6.15.1017</impala.jdbc.version>
     <uber.jar.name>cloudera-impala-jdbc-example-uber.jar</uber.jar.name>
     <uber.jar.main.class>com.cloudera.example.ClouderaImpalaJdbcExample</uber.jar.main.class>
+    <druid-version>1.1.21</druid-version>
   </properties>
 
   <dependencies>
@@ -28,6 +29,12 @@
       <version>${impala.jdbc.version}</version>
       <scope>system</scope>
       <systemPath>${basedir}/lib/ImpalaJDBC${jdbc.version}.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>${druid-version}</version>
     </dependency>
 
     <!-- End of dependencies provided by your local repo -->
@@ -52,6 +59,8 @@
 
   <build>
 
+    <finalName>${uber.jar.name}</finalName>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -72,14 +81,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <outputDirectory>${basedir}</outputDirectory>
-        </configuration>
-      </plugin>
+
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>2.5</version>
@@ -97,48 +99,19 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <shadedArtifactAttached>false</shadedArtifactAttached>
-          <outputFile>target/${uber.jar.name}</outputFile>
-          <artifactSet>
-            <includes>
-              <include>*:*</include>
-            </includes>
-          </artifactSet>
-          <filters>
-            <filter>
-              <artifact>*:*</artifact>
-              <excludes>
-                <exclude>META-INF/*.SF</exclude>
-                <exclude>META-INF/*.DSA</exclude>
-                <exclude>META-INF/*.RSA</exclude>
-              </excludes>
-            </filter>
-          </filters>
+          <!-- main class -->
+          <mainClass>${uber.jar.main.class}</mainClass>
+          <!-- inclue system scope jar -->
+          <includeSystemScope>true</includeSystemScope>
         </configuration>
         <executions>
           <execution>
-            <phase>package</phase>
             <goals>
-              <goal>shade</goal>
+              <goal>repackage</goal>
             </goals>
-            <configuration>
-              <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>reference.conf</resource>
-                </transformer>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>${uber.jar.main.class}</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -149,7 +122,7 @@
 
 
     <!-- YOUR LOCAL REPO -->
-    
+
     <!--    <repository>-->
     <!--      <id>YOUR.LOCAL.REPO.ID</id>-->
     <!--      <url>-->
